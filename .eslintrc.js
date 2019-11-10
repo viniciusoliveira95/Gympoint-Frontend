@@ -36,7 +36,10 @@ module.exports = {
     camelcase: "off",
     "no-console": ["error", { allow: ["tron"] }],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "jsx-a11y/control-has-associated-label": "off",
+    "no-alert": "off",
+    "no-restricted-globals": "off",
   },
   settings: {
     "import/resolver": {

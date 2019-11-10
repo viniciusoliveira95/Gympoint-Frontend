@@ -33,8 +33,6 @@ export const Content = styled.div`
     width: 100%;
 
     label {
-      display: flex;
-      flex-direction: column;
       margin-top: 20px;
       font-weight: bold;
       color: ${colors.fontBold};
@@ -43,28 +41,28 @@ export const Content = styled.div`
       &:first-child {
         margin-top: 0;
       }
+    }
 
-      input {
-        margin-top: 8px;
-        border-radius: 4px;
-        border: 1px solid #dddddd;
-        height: 45px;
-        padding: 15px 0 13px 13px;
+    input {
+      margin-top: 8px;
+      border-radius: 4px;
+      border: 1px solid #dddddd;
+      height: 45px;
+      padding: 15px 0 13px 13px;
 
-        &::placeholder {
-          font-size: 16px;
-          color: ${colors.placeholder};
-        }
+      &::placeholder {
+        font-size: 16px;
+        color: ${colors.placeholder};
       }
+    }
 
-      span {
-        color: ${colors.red};
-        font-size: 12px;
-        font-weight: bold;
+    span {
+      color: ${colors.red};
+      font-size: 12px;
+      font-weight: bold;
 
-        &::before {
-          content: '*';
-        }
+      &::before {
+        content: '*';
       }
     }
 

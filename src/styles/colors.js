@@ -8,4 +8,6 @@ export default {
   red: '#DE3B3B',
   blue: '#4D85EE',
   white: '#FFFFFF',
+  navLinks: '#999999',
+  btnVoltar: '#CCCCCC',
 };
