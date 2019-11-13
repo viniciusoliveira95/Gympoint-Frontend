@@ -12,7 +12,7 @@ export default function PlanCreate() {
       await api.post('/plans', {
         title: fields.title,
         duration: parseInt(fields.duration, 10),
-        price: parseFloat(fields.price.replace(',', '.').replace(' R$', '')),
+        price: parseFloat(fields.price.replace('R$', '').replace(',', '.')),
       });
 
       toast.success('Plano criado com sucesso');

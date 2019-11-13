@@ -37,8 +37,8 @@ export default function StudentCreate() {
         name: fields.name,
         email: fields.email,
         idade: fields.idade,
-        peso: parseFloat(fields.peso.replace(',', '.')),
-        altura: parseFloat(fields.altura.replace(',', '.')),
+        peso: parseFloat(fields.peso.replace(',', '.').replace('Kg', '')),
+        altura: parseFloat(fields.altura.replace(',', '.').replace('m', '')),
       });
       toast.success('Cadastro de estudante editado com sucesso');
       history.push('/students');
@@ -50,7 +50,7 @@ export default function StudentCreate() {
   return (
     <StudentForm
       initialData={student}
-      title="Cadastro de aluno"
+      title="Edição de aluno"
       handleSubmit={handleSubmit}
     />
   );

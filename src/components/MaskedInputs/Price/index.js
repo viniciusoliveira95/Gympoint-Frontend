@@ -6,8 +6,8 @@ import { useField } from '@rocketseat/unform';
 
 export default function MaskedPriceInput({ name, onChange, value }) {
   const priceMask = createNumberMask({
-    prefix: '',
-    suffix: ' R$',
+    prefix: 'R$',
+    suffix: '',
     includeThousandsSeparator: false,
     allowDecimal: true,
     decimalLimit: 2,

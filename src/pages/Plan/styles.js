@@ -26,7 +26,6 @@ export const Content = styled.div`
 `;
 
 export const CreateButton = styled.button`
-  margin-right: 16px;
   height: 36px;
   width: 142px;
   border: 0;

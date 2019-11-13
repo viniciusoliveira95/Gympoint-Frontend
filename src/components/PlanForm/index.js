@@ -4,7 +4,7 @@ import { MdCheck, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
 
-import MaskedPositiveInteger from '../MaskedInputs/PositiveIntger';
+import MaskedPositiveInteger from '../MaskedInputs/PositiveInteger';
 import MaskedPriceInput from '../MaskedInputs/Price';
 import history from '~/services/history';
 import { Container, Content, DivRow, FormInputs, Title } from './styles';
@@ -16,7 +16,7 @@ const schema = Yup.object().shape({
 });
 
 export default function PlanForm({ title, handleSubmit, initialData }) {
-  const [price, setPrice] = useState('0,00');
+  const [price, setPrice] = useState(' ');
   const [months, setMonths] = useState('');
 
   useEffect(() => {
@@ -27,8 +27,7 @@ export default function PlanForm({ title, handleSubmit, initialData }) {
   }, [initialData, initialData.duration, initialData.price]);
 
   const totalPrice = useMemo(() => {
-    const unformattedPrice =
-      price.replace(',', '.').replace(' R$', '') * months;
+    const unformattedPrice = price.replace('R$', '').replace(',', '.') * months;
     const formattedPrice = unformattedPrice.toFixed(2).replace('.', ',');
     return formattedPrice;
   }, [price, months]);
@@ -84,7 +83,7 @@ export default function PlanForm({ title, handleSubmit, initialData }) {
                   name="totalPrice"
                   id="totalPrice"
                   type="text"
-                  value={`${totalPrice} R$`}
+                  value={`R$${totalPrice}`}
                 />
               </label>
             </DivRow>

@@ -19,7 +19,7 @@ export default function RouterWrapper({
   }
 
   if (signed && !isPrivate) {
-    return <Redirect to="/student" />;
+    return <Redirect to="/students" />;
   }
 
   const Layout = signed ? DefaultLayout : LoginLayout;

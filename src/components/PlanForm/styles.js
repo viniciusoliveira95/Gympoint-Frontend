@@ -77,6 +77,8 @@ export const FormInputs = styled.div`
     border: 1px solid #dddddd;
     height: 45px;
     padding: 15px 0 13px 13px;
+    font-size: 16px;
+    color: ${colors.fontPrimary};
 
     &::placeholder {
       font-size: 16px;

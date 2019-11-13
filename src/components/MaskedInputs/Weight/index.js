@@ -7,17 +7,17 @@ import { useField } from '@rocketseat/unform';
 export default function MaskedWeightInput({ name, initialWeight }) {
   const weightMask = createNumberMask({
     prefix: '',
-    suffix: '',
+    suffix: 'Kg',
     includeThousandsSeparator: false,
     allowDecimal: true,
     decimalLimit: 1,
-    integerLimit: 5,
+    integerLimit: 3,
     decimalSymbol: ',',
   });
 
   const ref = useRef(null);
   const { fieldName, registerField, error } = useField(name);
-  const [weight, setWeight] = useState('');
+  const [weight, setWeight] = useState(' ');
 
   useEffect(() => {
     registerField({

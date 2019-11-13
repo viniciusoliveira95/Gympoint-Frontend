@@ -36,7 +36,7 @@ export default function PlanUpdate() {
       await api.put(`plans/${planId}`, {
         title: fields.title,
         duration: parseInt(fields.duration, 10),
-        price: parseFloat(fields.price.replace(',', '.').replace(' R$', '')),
+        price: parseFloat(fields.price.replace('R$', '').replace(',', '.')),
       });
 
       toast.success('Plano editado com sucesso');
@@ -48,7 +48,7 @@ export default function PlanUpdate() {
 
   return (
     <PlanForm
-      title="Cadastro de plano"
+      title="Edição de plano"
       handleSubmit={handleSubmit}
       initialData={plan}
     />

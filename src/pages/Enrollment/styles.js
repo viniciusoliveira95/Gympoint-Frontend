@@ -8,7 +8,7 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  max-width: 1200px;
+  max-width: 1380px;
   margin-top: 34px;
   width: 100%;
 
@@ -22,56 +22,24 @@ export const Content = styled.div`
       font-weight: bold;
       color: ${colors.fontBold};
     }
+  }
+`;
 
-    div {
-      display: flex;
-      align-items: center;
+export const CreateButton = styled.button`
+  height: 36px;
+  width: 142px;
+  border: 0;
+  border-radius: 4px;
+  background: ${colors.primary};
+  color: ${colors.white};
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      button {
-        margin-right: 16px;
-        height: 36px;
-        width: 142px;
-        border: 0;
-        border-radius: 4px;
-        background: ${colors.primary};
-        color: ${colors.white};
-        font-size: 14px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-          margin-right: 8px;
-        }
-      }
-
-      div {
-        position: relative;
-
-        svg {
-          position: absolute;
-          left: 16px;
-          cursor: pointer;
-        }
-
-        input {
-          padding: 0 20px 0 40px;
-          height: 36px;
-          width: 240px;
-          border: 1px solid #dddddd;
-          border-radius: 4px;
-          background: ${colors};
-          font-size: 14px;
-          color: ${colors.fontPrimary};
-
-          &::placeholder {
-            font-size: 14px;
-            color: ${colors.placeholder};
-          }
-        }
-      }
-    }
+  svg {
+    margin-right: 8px;
   }
 `;
 
@@ -97,20 +65,22 @@ export const Table = styled.table`
 
         &:nth-child(1) {
           text-align: left;
-          width: 30%;
+          width: 20%;
         }
         &:nth-child(2) {
-          text-align: left;
-          width: 25%;
+          width: 10%;
         }
         &:nth-child(3) {
-          width: 15%;
+          width: 25%;
         }
         &:nth-child(4) {
-          width: 15%;
+          width: 25%;
         }
         &:nth-child(5) {
-          width: 15%;
+          width: 10%;
+        }
+        &:nth-child(6) {
+          width: 10%;
         }
       }
     }
@@ -124,18 +94,12 @@ export const Table = styled.table`
         padding-bottom: 16px;
         padding-top: 16px;
         border-bottom: 1px solid #eeeeee;
+        text-align: center;
 
         &:nth-child(1) {
           text-align: left;
-          width: 30%;
         }
-        &:nth-child(3) {
-          text-align: center;
-        }
-        &:nth-child(4) {
-          text-align: center;
-        }
-        &:nth-child(5) {
+        &:nth-child(6) {
           text-align: right;
           a {
             color: ${colors.blue};

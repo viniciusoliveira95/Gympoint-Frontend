@@ -1,12 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { useField } from '@rocketseat/unform';
 
 export default function MaskedHeightInput({ name, initialHeight }) {
+  const HeightMask = createNumberMask({
+    prefix: '',
+    suffix: 'm',
+    includeThousandsSeparator: false,
+    allowDecimal: true,
+    decimalLimit: 2,
+    integerLimit: 1,
+    decimalSymbol: ',',
+  });
+
   const ref = useRef(null);
   const { fieldName, registerField, error } = useField(name);
-  const [height, setHeight] = useState('');
+  const [height, setHeight] = useState(' ');
 
   useEffect(() => {
     registerField({
@@ -24,8 +35,7 @@ export default function MaskedHeightInput({ name, initialHeight }) {
         id={fieldName}
         ref={ref}
         name={fieldName}
-        mask={[/\d/, ',', /\d/, /\d/]}
-        guide={false}
+        mask={HeightMask}
         value={height}
         onChange={e => setHeight(e.target.value)}
       />
