@@ -23,8 +23,11 @@ export default function EnrollmentUpdate() {
         enrollmentData.start_date = parseISO(enrollmentData.start_date);
 
         setEnrollment(enrollmentData);
-      } catch ({ response }) {
-        toast.error(response.data.error);
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar a matrícula';
+        toast.error(errorMessage);
         history.push('/enrollments');
       }
     }
@@ -37,10 +40,12 @@ export default function EnrollmentUpdate() {
       await api.put(`enrollments/${enrollmentId}`, fields);
 
       toast.success('Matrícula editada com sucesso');
-
       history.push('/enrollments');
     } catch (error) {
-      toast.error(error.response.data.error);
+      const errorMessage = error.response
+        ? error.response.data.error
+        : 'Falha ao atualizar a matrícula';
+      toast.error(errorMessage);
     }
   }
 

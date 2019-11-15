@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAdd, MdSearch, MdCheckCircle } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import swal from 'sweetalert';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
 import Loading from '~/components/Loading';
+import PaginateButtons from '~/components/PaginateButtons';
 
 import { Container, Content, Table, TableContainer } from './styles';
 
@@ -15,18 +17,30 @@ export default function Student() {
   const [page, setPage] = useState(1);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [paginate, setPaginate] = useState({});
 
   useEffect(() => {
     async function loadStudents() {
-      const response = await api.get('students', {
-        params: {
-          page,
-          name,
-        },
-      });
+      try {
+        const response = await api.get('students', {
+          params: {
+            page,
+            name,
+          },
+        });
 
-      setStudents(response.data);
-      setLoading(false);
+        const { studentList, ...paginateInfo } = response.data;
+
+        setStudents(studentList);
+        setPaginate(paginateInfo);
+        setLoading(false);
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar alunos';
+        toast.error(errorMessage);
+        setLoading(false);
+      }
     }
 
     loadStudents();
@@ -35,31 +49,53 @@ export default function Student() {
   function handleSearch() {
     const searchName = document.getElementById('searchName').value;
     setName(searchName);
+    setPage(1);
   }
 
   function handleEnterSearch(e) {
     if (e.key === 'Enter') {
       const searchName = document.getElementById('searchName').value;
       setName(searchName);
+      setPage(1);
     }
   }
 
-  async function handleDelete(id, studentName) {
-    const confirmDeletion = window.confirm(
-      `Realmente deseja deletear o(a) estudante ${studentName} ?`
-    );
+  function handleDelete(id, studentName) {
+    swal({
+      title: `Realmente deseja apagar o(a) estudante ${studentName} ?`,
+      text:
+        'Matrículas, pedidos de auxílio e checkins relacionado ao estudante também serão apagados',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then(async willDelte => {
+      if (willDelte) {
+        try {
+          await api.delete(`students/${id}`);
 
-    if (!confirmDeletion) return;
+          toast.success('Aluno deletado com sucesso');
 
-    try {
-      await api.delete(`students/${id}`);
+          setStudents(students.filter(student => student.id !== id));
+        } catch (error) {
+          const errorMessage = error.response
+            ? error.response.data.error
+            : 'Falha ao deletar aluno';
+          toast.error(errorMessage);
+        }
+      }
+    });
+  }
 
-      toast.success('Estudante deletado com sucesso');
+  function prevPage() {
+    if (!paginate.prevPage) return;
 
-      setStudents(students.filter(student => student.id !== id));
-    } catch (error) {
-      toast.error('Falha ao deletar o estudante');
-    }
+    setPage(page - 1);
+  }
+
+  function nextPage() {
+    if (!paginate.nextPage) return;
+
+    setPage(page + 1);
   }
 
   return (
@@ -135,6 +171,12 @@ export default function Student() {
                 </tbody>
               </Table>
             </TableContainer>
+            <PaginateButtons
+              prevDisabled={!paginate.prevPage}
+              nextDisabled={!paginate.nextPage}
+              prevPage={prevPage}
+              nextPage={nextPage}
+            />
           </Content>
         </Container>
       )}

@@ -22,8 +22,11 @@ export default function PlanUpdate() {
         planData.duration = planData.duration.toString();
 
         setPlan(planData);
-      } catch ({ response }) {
-        toast.error(response.data.error);
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar plano';
+        toast.error(errorMessage);
         history.push('/plans');
       }
     }
@@ -42,7 +45,10 @@ export default function PlanUpdate() {
       toast.success('Plano editado com sucesso');
       history.push('/plans');
     } catch (error) {
-      toast.error(error.response.data.error);
+      const errorMessage = error.response
+        ? error.response.data.error
+        : 'Falha ao editar plano';
+      toast.error(errorMessage);
     }
   }
 

@@ -60,7 +60,7 @@ export default function Routes() {
         isPrivate
       />
 
-      <Route path="/helporders" exact component={HelpOrder} isPrivate />
+      <Route path="/helpOrders" exact component={HelpOrder} isPrivate />
     </Switch>
   );
 }

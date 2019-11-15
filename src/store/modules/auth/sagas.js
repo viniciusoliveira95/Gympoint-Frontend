@@ -23,9 +23,13 @@ export function* signIn({ payload }) {
 
     history.push('/students');
   } catch (error) {
-    toast.error('Falha na autenticação, verifique seus dados', {
+    const errorMessage = error.response
+      ? error.response.data.error
+      : 'Falha na autenticação, verifique seus dados';
+    toast.error(errorMessage, {
       position: toast.POSITION.TOP_CENTER,
     });
+
     yield put(signInFailure());
   }
 }
@@ -40,7 +44,12 @@ export function setToken({ payload }) {
   }
 }
 
+export function signOut() {
+  history.push('/');
+}
+
 export default all([
   takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('@auth/SIGN_OUT', signOut),
 ]);

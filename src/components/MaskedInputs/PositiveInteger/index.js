@@ -1,17 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { useField } from '@rocketseat/unform';
 
 export default function MaskedPositiveInteger({ name, onChange, value }) {
-  const PositiveInteger = createNumberMask({
-    prefix: '',
-    suffix: '',
-    includeThousandsSeparator: false,
-    integerLimit: 3,
-  });
-
   const ref = useRef(null);
   const { fieldName, registerField, error } = useField(name);
 
@@ -29,9 +21,10 @@ export default function MaskedPositiveInteger({ name, onChange, value }) {
         id={fieldName}
         ref={ref}
         name={fieldName}
-        mask={PositiveInteger}
+        mask={[/[1-9]/, /[0-9]/, /[0-9]/]}
         value={value}
         onChange={onChange}
+        guide={false}
       />
       {error && <span>{error}</span>}
     </>
@@ -41,5 +34,5 @@ export default function MaskedPositiveInteger({ name, onChange, value }) {
 MaskedPositiveInteger.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };

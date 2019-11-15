@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { lighten } from 'polished';
 
 import colors from '~/styles/colors';
 
@@ -37,6 +38,11 @@ export const CreateButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.5s;
+
+  &:hover {
+    background: ${lighten(0.05, colors.primary)};
+  }
 
   svg {
     margin-right: 8px;
@@ -104,6 +110,11 @@ export const Table = styled.table`
           a {
             color: ${colors.blue};
             font-size: 15px;
+            transition: color 0.3s;
+
+            &:hover {
+              color: ${lighten(0.1, colors.blue)};
+            }
           }
 
           button {
@@ -112,6 +123,11 @@ export const Table = styled.table`
             font-size: 15px;
             background: ${colors.white};
             border: 0;
+            transition: color 0.3s;
+
+            &:hover {
+              color: ${lighten(0.1, colors.red)};
+            }
           }
         }
       }

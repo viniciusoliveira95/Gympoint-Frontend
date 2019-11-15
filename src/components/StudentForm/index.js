@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { MdCheck, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Form, Input } from '@rocketseat/unform';
@@ -6,7 +6,10 @@ import * as Yup from 'yup';
 
 import MaskedWeightInput from '~/components/MaskedInputs/Weight';
 import MaskedHeightInput from '~/components/MaskedInputs/Height';
+import MaskedPositiveInteger from '~/components/MaskedInputs/PositiveInteger';
+
 import history from '~/services/history';
+
 import { Container, Content, DivRow, FormInputs, Title } from './styles';
 
 const schema = Yup.object().shape({
@@ -14,15 +17,20 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Insira um e-mail válido')
     .required('O e-mail é obrigatório'),
-  idade: Yup.number()
-    .integer()
-    .positive('Precisa ser um número positivo')
-    .required('Idade é obrigatório'),
+  idade: Yup.string().required('Idade é obrigatório'),
   peso: Yup.string().required('Peso é obrigatório'),
   altura: Yup.string().required('Altura é obrigatório'),
 });
 
 export default function StudentForm({ title, handleSubmit, initialData }) {
+  const [age, setAge] = useState('');
+
+  useEffect(() => {
+    if (initialData.idade) {
+      setAge(initialData.idade);
+    }
+  }, [initialData.idade]);
+
   return (
     <Container>
       <Content>
@@ -59,13 +67,10 @@ export default function StudentForm({ title, handleSubmit, initialData }) {
               <label htmlFor="idade">
                 {' '}
                 IDADE
-                <Input
+                <MaskedPositiveInteger
                   name="idade"
-                  id="idade"
-                  type="number"
-                  min="1"
-                  max="150"
-                  step="1"
+                  value={age}
+                  onChange={e => setAge(e.target.value)}
                 />
               </label>
               <label htmlFor="peso">

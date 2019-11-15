@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import swal from 'sweetalert';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
 import Loading from '~/components/Loading';
+import PaginateButtons from '~/components/PaginateButtons';
 
 import {
   Container,
@@ -19,41 +21,76 @@ import {
 export default function Plan() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [paginate, setPaginate] = useState({});
 
   useEffect(() => {
     async function loadPlans() {
-      const response = await api.get('plans');
+      try {
+        const response = await api.get('plans', {
+          params: {
+            page,
+          },
+        });
 
-      const plansData = response.data;
+        const { planList, ...paginateInfo } = response.data;
 
-      plansData.map(plan => {
-        plan.price = plan.price.replace('.', ',');
-        return plan.price;
-      });
+        planList.map(plan => {
+          plan.price = plan.price.replace('.', ',');
+          return plan.price;
+        });
 
-      setPlans(plansData);
-      setLoading(false);
+        setPlans(planList);
+        setPaginate(paginateInfo);
+        setLoading(false);
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar planos';
+        toast.error(errorMessage);
+        setLoading(false);
+      }
     }
 
     loadPlans();
-  }, []);
+  }, [page]);
 
   async function handleDelete(id, planTitle) {
-    const confirmDeletion = window.confirm(
-      `Realmente deseja deletear o plano ${planTitle} ?`
-    );
+    swal({
+      title: `Realmente deseja apagar o plano ${planTitle} ?`,
+      text:
+        'Matrículas que utilizam esse plano ficaram com campo matrícua em branco ',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then(async willDelte => {
+      if (willDelte) {
+        try {
+          await api.delete(`plans/${id}`);
 
-    if (!confirmDeletion) return;
+          toast.success('Plano deletado com sucesso');
 
-    try {
-      await api.delete(`plans/${id}`);
+          setPlans(plans.filter(plan => plan.id !== id));
+        } catch (error) {
+          const errorMessage = error.response
+            ? error.response.data.error
+            : 'Falha ao deletar o plano';
+          toast.error(errorMessage);
+        }
+      }
+    });
+  }
 
-      toast.success('Plano deletado com sucesso');
+  function prevPage() {
+    if (!paginate.prevPage) return;
 
-      setPlans(plans.filter(plan => plan.id !== id));
-    } catch (error) {
-      toast.error('Falha ao deletar o plano');
-    }
+    setPage(page - 1);
+  }
+
+  function nextPage() {
+    if (!paginate.nextPage) return;
+
+    setPage(page + 1);
   }
 
   return (
@@ -103,6 +140,12 @@ export default function Plan() {
                 </tbody>
               </Table>
             </TableContainer>
+            <PaginateButtons
+              prevDisabled={!paginate.prevPage}
+              nextDisabled={!paginate.nextPage}
+              prevPage={prevPage}
+              nextPage={nextPage}
+            />
           </Content>
         </Container>
       )}

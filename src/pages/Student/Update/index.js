@@ -7,7 +7,7 @@ import history from '~/services/history';
 
 import StudentForm from '~/components/StudentForm';
 
-export default function StudentCreate() {
+export default function StudentUpdate() {
   const [student, setStudent] = useState({});
   const { studentId } = useParams();
 
@@ -22,8 +22,11 @@ export default function StudentCreate() {
         studentData.altura = studentData.altura.replace('.', ',');
 
         setStudent(studentData);
-      } catch ({ response }) {
-        toast.error(response.data.error);
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar aluno';
+        toast.error(errorMessage);
         history.push('/students');
       }
     }
@@ -42,8 +45,12 @@ export default function StudentCreate() {
       });
       toast.success('Cadastro de estudante editado com sucesso');
       history.push('/students');
-    } catch ({ response }) {
-      toast.error(response.data.error);
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.error
+        : 'Falha ao editar aluno';
+      toast.error(errorMessage);
+      history.push('/students');
     }
   }
 

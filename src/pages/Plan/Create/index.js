@@ -18,7 +18,10 @@ export default function PlanCreate() {
       toast.success('Plano criado com sucesso');
       history.push('/plans');
     } catch (error) {
-      toast.error(error.response.data.error);
+      const errorMessage = error.response
+        ? error.response.data.error
+        : 'Falha ao criar plano';
+      toast.error(errorMessage);
     }
   }
 

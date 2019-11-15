@@ -4,11 +4,13 @@ import pt from 'date-fns/locale/pt';
 import { Link } from 'react-router-dom';
 import { MdAdd, MdCheckCircle } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import swal from 'sweetalert';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
 import Loading from '~/components/Loading';
+import PaginateButtons from '~/components/PaginateButtons';
 
 import {
   Container,
@@ -22,9 +24,10 @@ export default function Enrollment() {
   const [enrollments, setEnrollments] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [paginate, setPaginate] = useState({});
 
   useEffect(() => {
-    async function loadStudents() {
+    async function loadEnrollments() {
       try {
         const response = await api.get('enrollments', {
           params: {
@@ -32,7 +35,9 @@ export default function Enrollment() {
           },
         });
 
-        const studentData = response.data.map(student => {
+        const { enrollmentList, ...paginateInfo } = response.data;
+
+        enrollmentList.map(student => {
           student.start_date = format(
             parseISO(student.start_date),
             "d 'de' MMMM 'de' yyyy",
@@ -48,33 +53,57 @@ export default function Enrollment() {
           return student;
         });
 
-        setEnrollments(studentData);
+        setEnrollments(enrollmentList);
+        setPaginate(paginateInfo);
         setLoading(false);
-      } catch ({ response }) {
-        toast.error(response.data.error);
-        history.push('/plans');
+      } catch (error) {
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar matrículas';
+        toast.error(errorMessage);
+        setLoading(false);
       }
     }
 
-    loadStudents();
+    loadEnrollments();
   }, [page]);
 
   async function handleDelete(id, studentName) {
-    const confirmDeletion = window.confirm(
-      `Realmente deseja deletear a matrícula do(a) estudante ${studentName} ?`
-    );
+    swal({
+      title: `Realmente deseja apagar a matrícula do estudante ${studentName} ?`,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then(async willDelte => {
+      if (willDelte) {
+        try {
+          await api.delete(`enrollments/${id}`);
 
-    if (!confirmDeletion) return;
+          toast.success('Matrícula deletado com sucesso');
 
-    try {
-      await api.delete(`enrollments/${id}`);
+          setEnrollments(
+            enrollments.filter(enrollment => enrollment.id !== id)
+          );
+        } catch (error) {
+          const errorMessage = error.response
+            ? error.response.data.error
+            : 'Falha ao deletar a matrícula';
+          toast.error(errorMessage);
+        }
+      }
+    });
+  }
 
-      toast.success('Matrícula deletado com sucesso');
+  function prevPage() {
+    if (!paginate.prevPage) return;
 
-      setEnrollments(enrollments.filter(enrollment => enrollment.id !== id));
-    } catch (error) {
-      toast.error('Falha ao deletar a mtrŕiculaa');
-    }
+    setPage(page - 1);
+  }
+
+  function nextPage() {
+    if (!paginate.nextPage) return;
+
+    setPage(page + 1);
   }
 
   return (
@@ -110,7 +139,9 @@ export default function Enrollment() {
                   {enrollments.map(enrollment => (
                     <tr key={String(enrollment.id)}>
                       <td>{enrollment.student.name}</td>
-                      <td>{enrollment.plan.title}</td>
+                      <td>
+                        {enrollment.plan === null ? '' : enrollment.plan.title}
+                      </td>
                       <td>{enrollment.start_date}</td>
                       <td>{enrollment.end_date}</td>
                       <td>
@@ -137,6 +168,12 @@ export default function Enrollment() {
                 </tbody>
               </Table>
             </TableContainer>
+            <PaginateButtons
+              prevDisabled={!paginate.prevPage}
+              nextDisabled={!paginate.nextPage}
+              prevPage={prevPage}
+              nextPage={nextPage}
+            />
           </Content>
         </Container>
       )}

@@ -42,6 +42,11 @@ export const FormHeader = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background 0.5s;
+
+      &:hover {
+        background: ${lighten(0.05, colors.btnVoltar)};
+      }
 
       svg {
         margin-right: 8px;
@@ -50,6 +55,11 @@ export const FormHeader = styled.div`
       &:last-child {
         background: ${colors.primary};
         margin-right: 0;
+        transition: background 0.5s;
+
+        &:hover {
+          background: ${lighten(0.05, colors.primary)};
+        }
       }
     }
   }
@@ -69,6 +79,19 @@ export const InputContainer = styled.div`
     font-size: 14px;
     font-weight: bold;
     color: ${colors.fontBold};
+  }
+
+  span:last-child {
+    margin-top: 8px;
+    display: flex;
+    align-self: flex-start;
+    color: ${colors.red};
+    font-size: 12px;
+    font-weight: bold;
+
+    &::before {
+      content: '*';
+    }
   }
 `;
 
@@ -91,6 +114,19 @@ export const InputPlanContainer = styled.div`
     font-weight: bold;
     color: ${colors.fontBold};
   }
+
+  span:last-child {
+    margin-top: 8px;
+    display: flex;
+    align-self: flex-start;
+    color: ${colors.red};
+    font-size: 12px;
+    font-weight: bold;
+
+    &::before {
+      content: '*';
+    }
+  }
 `;
 
 export const InputRowContainer = styled.div`
@@ -110,6 +146,19 @@ export const InputRowContainer = styled.div`
     font-size: 14px;
     font-weight: bold;
     color: ${colors.fontBold};
+  }
+
+  span:last-child {
+    margin-top: 8px;
+    display: flex;
+    align-self: flex-start;
+    color: ${colors.red};
+    font-size: 12px;
+    font-weight: bold;
+
+    &::before {
+      content: '*';
+    }
   }
 
   input {

@@ -16,10 +16,13 @@ export default function StudentCreate() {
         peso: parseFloat(fields.peso.replace(',', '.').replace('Kg', '')),
         altura: parseFloat(fields.altura.replace(',', '.').replace('m', '')),
       });
-      toast.success('Cadastro de estudante criado com sucesso');
+      toast.success('Cadastro de aluno criado com sucesso');
       history.push('/students');
     } catch (error) {
-      toast.error(error.response.data.error);
+      const errorMessage = error.response
+        ? error.response.data.error
+        : 'Falha ao criar aluno';
+      toast.error(errorMessage);
     }
   }
 

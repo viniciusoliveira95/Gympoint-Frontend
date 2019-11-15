@@ -14,7 +14,10 @@ export default function EnrollmentCreate() {
       toast.success('Matrícula efetuada com sucesso');
       history.push('/enrollments');
     } catch (error) {
-      toast.error(error.response.data.error);
+      const errorMessage = error.response
+        ? error.response.data.error
+        : 'Falha ao efetuar a matrícula';
+      toast.error(errorMessage);
     }
   }
 

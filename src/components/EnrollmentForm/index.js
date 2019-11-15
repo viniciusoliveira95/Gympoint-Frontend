@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { format, addMonths } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import * as Yup from 'yup';
 import { MdCheck, MdKeyboardArrowLeft } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import { Form } from '@rocketseat/unform';
@@ -23,6 +24,14 @@ import {
   InputPlanContainer,
 } from './styles';
 
+const schema = Yup.object().shape({
+  student_id: Yup.string().required('O campo aluno é obrigatório'),
+  plan_id: Yup.string().required('O campo plano é obrigatório'),
+  start_date: Yup.date('Data de início é obrigatóri')
+    .required('Data de início é obrigatório')
+    .nullable(),
+});
+
 export default function EnrollmentForm({ title, initialData, handleSubmit }) {
   const [startDate, setStartDate] = useState(initialData.start_date);
   const [minDate, setMinDate] = useState(new Date());
@@ -38,9 +47,12 @@ export default function EnrollmentForm({ title, initialData, handleSubmit }) {
       try {
         const response = await api.get('plans');
 
-        setPLans(response.data);
+        setPLans(response.data.planList);
       } catch (error) {
-        toast.error('Falha ao carregar planos');
+        const errorMessage = error.response
+          ? error.response.data.error
+          : 'Falha ao carregar planos';
+        toast.error(errorMessage);
       }
     }
 
@@ -76,12 +88,11 @@ export default function EnrollmentForm({ title, initialData, handleSubmit }) {
   async function loadStudents(name) {
     const response = await api.get('students', {
       params: {
-        page: 1,
         name,
       },
     });
 
-    const options = response.data.map(student => ({
+    const options = response.data.studentList.map(student => ({
       id: student.id,
       name: student.name,
     }));
@@ -99,7 +110,7 @@ export default function EnrollmentForm({ title, initialData, handleSubmit }) {
   return (
     <Container>
       <Content>
-        <Form initialData={initialData} onSubmit={handleSubmit}>
+        <Form schema={schema} initialData={initialData} onSubmit={handleSubmit}>
           <FormHeader>
             <p>{title}</p>
             <div>

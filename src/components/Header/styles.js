@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { lighten } from 'polished';
+
 import colors from '~/styles/colors';
 
 export const Container = styled.div`
@@ -58,9 +60,15 @@ export const Profile = styled.div`
     color: ${colors.fontPrimary};
   }
 
-  a {
-    text-align: right;
-    font-size: 14px;
+  button {
     color: ${colors.red};
+    font-size: 14px;
+    background: ${colors.white};
+    border: 0;
+    transition: color 0.3s;
+
+    &:hover {
+      color: ${lighten(0.1, colors.red)};
+    }
   }
 `;
