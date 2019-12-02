@@ -27,6 +27,7 @@ export default function Enrollment() {
   const [paginate, setPaginate] = useState({});
 
   useEffect(() => {
+    console.tron.log(`loaded${loading}`);
     async function loadEnrollments() {
       try {
         const response = await api.get('enrollments', {
@@ -34,7 +35,6 @@ export default function Enrollment() {
             page,
           },
         });
-
         const { enrollmentList, ...paginateInfo } = response.data;
 
         enrollmentList.map(student => {
@@ -66,7 +66,7 @@ export default function Enrollment() {
     }
 
     loadEnrollments();
-  }, [page]);
+  }, [loading, page]);
 
   async function handleDelete(id, studentName) {
     swal({

@@ -16,7 +16,7 @@ export default function Student() {
   const [students, setStudents] = useState([]);
   const [page, setPage] = useState(1);
   const [name, setName] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [paginate, setPaginate] = useState({});
 
   useEffect(() => {
